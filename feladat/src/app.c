@@ -113,6 +113,14 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_ESCAPE:
                 app->is_running = false;
                 break;
+            case SDL_SCANCODE_KP_PLUS:
+                app->scene.lightingLevel += 0.2f;
+                set_lighting(app->scene.lightingLevel);
+                break;
+            case SDL_SCANCODE_KP_MINUS:
+                app->scene.lightingLevel -= 0.2f;
+                set_lighting(app->scene.lightingLevel);
+                break;
             case SDL_SCANCODE_W:
                 set_camera_speed(&(app->camera), 1);
                 break;

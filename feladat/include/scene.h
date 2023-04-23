@@ -11,6 +11,7 @@ typedef struct Scene
     Model cube;
     Material material;
     GLuint texture_id;
+    float lightingLevel;
 } Scene;
 
 /**
@@ -21,7 +22,7 @@ void init_scene(Scene* scene);
 /**
  * Set the lighting of the scene.
  */
-void set_lighting();
+void set_lighting(float lightingLevel);
 
 /**
  * Set the current material.

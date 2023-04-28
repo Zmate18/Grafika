@@ -5,10 +5,11 @@
 
 void init_scene(Scene* scene)
 {
-    load_model(&(scene->cube), "assets/models/cube.obj");
-    scene->texture_id = load_texture("assets/textures/cube.png");
 
-    glBindTexture(GL_TEXTURE_2D, scene->texture_id);
+    init_ship(&(scene->ship));
+
+    init_apache(&(scene->apache));
+ 
 
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
@@ -16,7 +17,7 @@ void init_scene(Scene* scene)
 
     scene->material.diffuse.red = 1.0;
     scene->material.diffuse.green = 1.0;
-    scene->material.diffuse.blue = 0.0;
+    scene->material.diffuse.blue = 1.0;
 
     scene->material.specular.red = 0.0;
     scene->material.specular.green = 0.0;
@@ -24,7 +25,10 @@ void init_scene(Scene* scene)
 
     scene->material.shininess = 0.0;
 
-    scene->lightingLevel=1.0;
+    scene->lightingLevel=1.8f;
+    set_lighting(scene->lightingLevel);
+
+    glFogf(GL_FOG_DENSITY, 0.25f);
 }
 
 void set_lighting(float lightingLevel)
@@ -32,7 +36,7 @@ void set_lighting(float lightingLevel)
     float ambient_light[] = { lightingLevel, lightingLevel, lightingLevel, 1.0f };
     float diffuse_light[] = { lightingLevel, lightingLevel, lightingLevel, 1.0f };
     float specular_light[] = { lightingLevel, lightingLevel, lightingLevel, 1.0f };
-    float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
+    float position[] = { 0.0f, 10.0f, 10.0f, 1.0f };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
@@ -74,25 +78,20 @@ void update_scene(Scene* scene)
 void render_scene(const Scene* scene)
 {
     set_material(&(scene->material));
-    draw_origin();
-    draw_model(&(scene->cube));
-}
+    
+    glBindTexture(GL_TEXTURE_2D, scene->ship.texture_id);
+    glPushMatrix();
+    glRotatef(90.0, 1.0, 0.0, 0.0);
+    draw_model(&(scene->ship.model));
+    glPopMatrix();
 
-void draw_origin()
-{
-    glBegin(GL_LINES);
+    glBindTexture(GL_TEXTURE_2D, scene->apache.texture_id);
+    glPushMatrix();
+    glRotatef(90.0, 1.0, 0.0, 0.0);
+    draw_model(&(scene->apache.model));
+    draw_model(&(scene->apache.rotor.rotorTop));
+    draw_model(&(scene->apache.rotor.rotorBack));
+    glPopMatrix();
 
-    glColor3f(1, 0, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(1, 0, 0);
 
-    glColor3f(0, 1, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 1, 0);
-
-    glColor3f(0, 0, 1);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 1);
-
-    glEnd();
 }

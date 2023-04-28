@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "model.h": "c",
+        "load.h": "c",
+        "draw.h": "c"
+    }
+}

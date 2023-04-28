@@ -3,15 +3,17 @@
 
 #include "camera.h"
 #include "texture.h"
+#include "ship.h"
+#include "apache.h"
 
 #include <obj/model.h>
 
 typedef struct Scene
 {
-    Model cube;
     Material material;
-    GLuint texture_id;
+    Ship ship;
     float lightingLevel;
+    Apache apache;
 } Scene;
 
 /**
@@ -38,10 +40,5 @@ void update_scene(Scene* scene);
  * Render the scene objects.
  */
 void render_scene(const Scene* scene);
-
-/**
- * Draw the origin of the world coordinate system.
- */
-void draw_origin();
 
 #endif /* SCENE_H */

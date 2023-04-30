@@ -24,5 +24,4 @@ A beadandóm egy 3D-s világban szereplő repülőgép-anyahajót tartalmaz, ami
 <kbd>F1</kbd> - Program leírás előhívása vagy eltűntetése <br />
 <kbd>+</kbd> - Fények növelése <br />
 <kbd>-</kbd> - Fények csökkentése <br />
-<kbd>L</kbd> - Kamera rögzítése a helikopterre <br />
-<kbd>F</kbd> - Szabad kamerára váltás <br />
+<kbd>L</kbd> - Kamera rögzítése a helikopterre, vagy szabad kamerára váltás <br />

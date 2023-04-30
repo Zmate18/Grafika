@@ -1,4 +1,4 @@
-# Számítógépi grafika beadandó - Helikopter szimulátor
+# Számítógépi grafika beadandó: helikopter szimulátor
 ## A feladat leírása
 A beadandóm egy 3D-s világban szereplő repülőgép-anyahajót tartalmaz, ami a tengeren helyezkedik el és a hajó egy Apache helikoptert szállít. Maga a hajó nem irányítható, hiszen csak a "talaj" szerepét tölti be, itt a lényeg a helikopter. A helikopteren beindíthatóak a rotorok, majd felszáll és irányítható, le is leszállhat és leállítható a helikopter. Leszállás esetében, ha nem sikerül a hajóra érkezni, azaz a tengerbe érkezik a helikopterrel, akkor a szimulátor véget ér és kéri, hogy kezdjük újra.
 ## Irányítás

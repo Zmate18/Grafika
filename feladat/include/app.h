@@ -56,4 +56,9 @@ void render_app(App* app);
  */
 void destroy_app(App* app);
 
+/**
+ * Lock camera to helicopter.
+ */
+void lock_apache_camera(App* app);
+
 #endif /* APP_H */

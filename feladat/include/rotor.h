@@ -13,6 +13,8 @@ typedef struct Rotor
     Model rotorTop;
     Model rotorBack;
     vec3 pos;
+    vec3 rotation;
+    vec3 rotationSpeed;
 } Rotor;
 
 

@@ -7,16 +7,18 @@
 void init_camera(Camera* camera)
 {
     camera->position.x = 0.0;
-    camera->position.y = 0.0;
-    camera->position.z = 1.0;
-    camera->rotation.x = 0.0;
+    camera->position.y = 5.0;
+    camera->position.z = 2.0;
+    camera->rotation.x = 350.0;
     camera->rotation.y = 0.0;
-    camera->rotation.z = 0.0;
+    camera->rotation.z = 268.0;
     camera->speed.x = 0.0;
     camera->speed.y = 0.0;
     camera->speed.z = 0.0;
 
     camera->is_preview_visible = false;
+
+    camera->locked = true;
 }
 
 void update_camera(Camera* camera, double time)
@@ -31,7 +33,6 @@ void update_camera(Camera* camera, double time)
     camera->position.y += sin(angle) * camera->speed.y * time;
     camera->position.x += cos(side_angle) * camera->speed.x * time;
     camera->position.y += sin(side_angle) * camera->speed.x * time;
-    camera->position.z += camera->speed.z * time;
     camera->position.z += camera->speed.z * time;
 }
 

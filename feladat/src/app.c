@@ -140,10 +140,11 @@ void handle_app_events(App *app)
                             set_tilt_speed(&(app->scene.apache), 3);
                             app->scene.apache.forward = true;
                         }
-                }
-                else
-                {
-                    set_camera_speed(&(app->camera), 3);
+                    }
+                    else
+                    {
+                        set_camera_speed(&(app->camera), 3);
+                    }
                 }
                 break;
             case SDL_SCANCODE_S:
@@ -157,10 +158,11 @@ void handle_app_events(App *app)
                             set_tilt_speed(&(app->scene.apache), -3);
                             app->scene.apache.backward = true;
                         }
-                }
-                else
-                {
-                    set_camera_speed(&(app->camera), -3);
+                    }
+                    else
+                    {
+                        set_camera_speed(&(app->camera), -3);
+                    }
                 }
                 break;
             case SDL_SCANCODE_A:
@@ -262,6 +264,7 @@ void handle_app_events(App *app)
                     app->scene.helpShow = true;
                 }
                 break;
+                break;
             default:
                 break;
             }
@@ -307,7 +310,6 @@ void handle_app_events(App *app)
                 {
                     set_camera_vertical_speed(&(app->camera), 0);
                 }
-                break;
             default:
                 break;
             }
@@ -317,7 +319,7 @@ void handle_app_events(App *app)
             break;
         case SDL_MOUSEMOTION:
             SDL_GetMouseState(&x, &y);
-            if (is_mouse_down && !app->camera.locked)
+            if (is_mouse_down)
             {
                 rotate_camera(&(app->camera), mouse_x - x, mouse_y - y);
             }

@@ -68,6 +68,21 @@ void move_apache(Apache* apache, double time);
 void set_rotorTop_speed(Apache* apache, double speed);
 
 /**
+ * Sets the top rotor speed.
+*/
+void set_rotorTop_speed(Apache* apache, double speed);
+
+/**
+ * Sets the rotor rotation.
+*/
+void rotate_rotor(Apache* apache, double time);
+
+/**
+ * Moves the apache helicopter.
+*/
+void move_apache(Apache* apache, double time);
+
+/**
  * Sets the back rotor speed.
 */
 void set_rotorBack_speed(Apache* apache, double speed);
@@ -101,6 +116,12 @@ void set_tilt_speed(Apache* apache, double speed);
  * Sets the helicopter side tilting speed.
 */
 void set_side_tilt_speed(Apache* apache, double speed);
+
+void tilt_apache_forward(Apache* apache, double time, bool tilt);
+
+void tilt_apache_backward(Apache* apache, double time, bool tilt);
+
+void set_tilt_speed(Apache* apache, double speed);
 
 
 #endif /*APACHE_H*/

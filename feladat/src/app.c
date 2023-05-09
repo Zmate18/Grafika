@@ -140,7 +140,6 @@ void handle_app_events(App *app)
                             set_tilt_speed(&(app->scene.apache), 3);
                             app->scene.apache.forward = true;
                         }
-                    }
                 }
                 else
                 {
@@ -158,7 +157,6 @@ void handle_app_events(App *app)
                             set_tilt_speed(&(app->scene.apache), -3);
                             app->scene.apache.backward = true;
                         }
-                    }
                 }
                 else
                 {

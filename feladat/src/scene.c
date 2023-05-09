@@ -115,7 +115,7 @@ void help(GLuint texture)
 void render_scene(const Scene *scene)
 {
     set_material(&(scene->material));
-
+  
     //ship
     glBindTexture(GL_TEXTURE_2D, scene->ship.texture_id);
     glPushMatrix();
@@ -123,7 +123,7 @@ void render_scene(const Scene *scene)
     draw_model(&(scene->ship.model));
     glPopMatrix();
 
-    //helicopter
+    // helicopter
     glBindTexture(GL_TEXTURE_2D, scene->apache.texture_id);
     glPushMatrix();
     glTranslatef(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
@@ -166,6 +166,11 @@ void render_scene(const Scene *scene)
     
     /*
     // rotor back
+    glRotatef(scene->apache.rotor.rotation.y, 0.0, 1.0, 0.0);
+    glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
+    draw_model(&(scene->apache.rotor.rotorTop));
+    glPopMatrix();
+
     if (scene->apache.tilt.x >= 0.0 && scene->apache.tilt.x <= 0.25)
     {
         glPushMatrix();

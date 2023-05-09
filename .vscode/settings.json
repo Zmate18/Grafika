@@ -4,5 +4,6 @@
         "load.h": "c",
         "draw.h": "c",
         "apache.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -14,6 +14,8 @@ typedef struct Scene
     Ship ship;
     float lightingLevel;
     Apache apache;
+    bool helpShow;
+    GLuint help_texture;
 } Scene;
 
 /**
@@ -40,5 +42,10 @@ void update_scene(Scene* scene);
  * Render the scene objects.
  */
 void render_scene(const Scene* scene);
+
+/**
+ * Show help.
+ */
+void help(GLuint texture);
 
 #endif /* SCENE_H */

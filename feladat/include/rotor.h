@@ -6,6 +6,7 @@
 #include <obj/draw.h>
 #include "texture.h"
 #include "utils.h"
+#include <stdbool.h>
 
 typedef struct Rotor
 {
@@ -15,6 +16,7 @@ typedef struct Rotor
     vec3 pos;
     vec3 rotation;
     vec3 rotationSpeed;
+    bool active;
 } Rotor;
 
 

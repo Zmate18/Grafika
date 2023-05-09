@@ -16,10 +16,6 @@ void init_apache(Apache *apache)
     apache->speed.y = 0.0;
     apache->speed.z = 0.0;
 
-    apache->rotor.pos.x = 0.0;
-    apache->rotor.pos.y = 0.0;
-    apache->rotor.pos.z = 0.0;
-
     apache->rotor.rotation.x = 0.0;
     apache->rotor.rotation.y = 0.0;
     apache->rotor.rotation.z = 0.0;
@@ -38,6 +34,13 @@ void init_apache(Apache *apache)
 
     apache->forward = false;
     apache->backward = false;
+    apache->left = false;
+    apache->right = false;
+
+    apache->rotor.active = false;
+
+    apache->tiltBlock = true;
+    
 }
 
 void set_apache_pos(Apache *apache, vec3 newPos)
@@ -69,11 +72,6 @@ void move_apache(Apache *apache, double time)
     apache->pos.z += apache->speed.z * time;
 }
 
-void set_rotorTop_speed(Apache *apache, double speed)
-{
-    apache->rotor.rotationSpeed.y = speed;
-}
-
 void rotate_rotor(Apache *apache, double time)
 {
     if (apache->rotor.rotation.z < 0)
@@ -95,8 +93,35 @@ void rotate_rotor(Apache *apache, double time)
     {
         apache->rotor.rotation.x -= 360.0;
     }
-    apache->rotor.rotation.y += apache->rotor.rotationSpeed.y * time * 50;
+    
     apache->rotor.rotation.x += apache->rotor.rotationSpeed.x * time * 50;
+
+    //top rotor speed up/slow donw
+    apache->rotor.rotation.y += apache->rotor.rotationSpeed.y;
+    if (apache->rotor.rotationSpeed.y <= 8 && apache->rotor.active)
+    {
+        apache->rotor.rotationSpeed.y += time;
+    }
+
+    if (!apache->rotor.active && apache->rotor.rotationSpeed.y >= 0.0)
+    {
+        apache->rotor.rotationSpeed.y -= time;
+    }
+
+    //slow down to 0 the rotor speed
+    if (apache->rotor.rotationSpeed.y < 0.0)
+    {
+        apache->rotor.rotationSpeed.y = 0.0;
+    }
+    
+    
+    printf("%f \n", apache->rotor.rotationSpeed.y);
+    
+}
+
+void set_rotorTop_speed(Apache *apache, double speed)
+{
+    apache->rotor.rotationSpeed.y = speed;
 }
 
 void set_rotorBack_speed(Apache *apache, double speed)
@@ -107,6 +132,11 @@ void set_rotorBack_speed(Apache *apache, double speed)
 void set_tilt_speed(Apache* apache, double speed)
 {
     apache->tiltSpeed.x = speed;
+}
+
+void set_side_tilt_speed(Apache* apache, double speed)
+{
+    apache->tiltSpeed.z = speed;
 }
 
 void tilt_apache_forward(Apache *apache, double time, bool tilt)
@@ -131,7 +161,7 @@ void tilt_apache_backward(Apache *apache, double time, bool tilt)
 {
     if (tilt)
     {
-        if (apache->tilt.x > -30.0 && apache->tilt.x <= 0)
+        if (apache->tilt.x > -30.0)
         {
             apache->tilt.x += time * apache->tiltSpeed.x * 12;
         }
@@ -143,5 +173,40 @@ void tilt_apache_backward(Apache *apache, double time, bool tilt)
             apache->tilt.x -= time * apache->tiltSpeed.x * 12;
         }
     }
-    
+}
+
+void tilt_apache_right(Apache *apache, double time, bool tilt)
+{
+    if (tilt)
+    {
+        if (apache->tilt.z < 30.0)
+        {
+            apache->tilt.z += time * apache->tiltSpeed.z * -12;
+        }
+    }
+    else
+    {
+        if (apache->tilt.z > 0)
+        {
+            apache->tilt.z -= time * apache->tiltSpeed.z * -12;
+        }
+    }
+}
+
+void tilt_apache_left(Apache *apache, double time, bool tilt)
+{
+    if (tilt)
+    {
+        if (apache->tilt.z > -30.0)
+        {
+            apache->tilt.z += time * apache->tiltSpeed.z * -12;
+        }
+    }
+    else
+    {
+        if (apache->tilt.z < 0)
+        {
+            apache->tilt.z -= time * apache->tiltSpeed.z * 12;
+        }
+    }
 }

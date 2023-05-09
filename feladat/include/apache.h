@@ -22,37 +22,35 @@ typedef struct Apache
     vec3 tiltSpeed;
     bool forward;
     bool backward;
+    bool left;
+    bool right;
+    bool tiltBlock;
 } Apache;
 
 /**
- * Initialize the Apache.
+ * Initialize the helicopter.
 */
 void init_apache(Apache* apache);
 
 /**
- * Set the Apache position.
+ * Set the helicopter position.
 */
 void set_apache_pos(Apache* apache, vec3 newPos);
 
 /**
- * Sets the apache speed.
+ * Sets the helicopter speed.
 */
 void set_apache_speed(Apache* apache, double speed);
 
 /**
- * Sets the apache side speed.
+ * Sets the helicopter side speed.
 */
 void set_apache_side_speed(Apache* apache, double speed);
 
 /**
- * Sets the apache vertical speed.
+ * Sets the helicopter vertical speed.
 */
 void set_apache_vertical_speed(Apache* apache, double speed);
-
-/**
- * Sets the top rotor speed.
-*/
-void set_rotorTop_speed(Apache* apache, double speed);
 
 /**
  * Sets the rotor rotation.
@@ -60,20 +58,49 @@ void set_rotorTop_speed(Apache* apache, double speed);
 void rotate_rotor(Apache* apache, double time);
 
 /**
- * Moves the apache helicopter.
+ * Moves the helicopter.
 */
 void move_apache(Apache* apache, double time);
+
+/**
+ * Sets the top rotor speed.
+*/
+void set_rotorTop_speed(Apache* apache, double speed);
 
 /**
  * Sets the back rotor speed.
 */
 void set_rotorBack_speed(Apache* apache, double speed);
 
+/**
+ * Tilt forward the helicopter.
+*/
 void tilt_apache_forward(Apache* apache, double time, bool tilt);
 
+/**
+ * Tilt backward the helicopter.
+*/
 void tilt_apache_backward(Apache* apache, double time, bool tilt);
 
+/**
+ * Tilt left the helicopter.
+*/
+void tilt_apache_left(Apache* apache, double time, bool tilt);
+
+/**
+ * Tilt right the helicopter.
+*/
+void tilt_apache_right(Apache* apache, double time, bool tilt);
+
+/**
+ * Sets the helicopter tilting speed.
+*/
 void set_tilt_speed(Apache* apache, double speed);
+
+/**
+ * Sets the helicopter side tilting speed.
+*/
+void set_side_tilt_speed(Apache* apache, double speed);
 
 
 #endif /*APACHE_H*/

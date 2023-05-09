@@ -17,7 +17,7 @@ void init_app(App *app, int width, int height)
     }
 
     app->window = SDL_CreateWindow(
-        "Cube!",
+        "Helikopter szimulator",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
         SDL_WINDOW_OPENGL);
@@ -132,11 +132,14 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_W:
                 if (app->camera.locked)
                 {
-                    if (!app->scene.apache.backward)
+                    if (!app->scene.apache.tiltBlock)
                     {
-                        set_apache_speed(&(app->scene.apache), 3);
-                        set_tilt_speed(&(app->scene.apache), 3);
-                        app->scene.apache.forward = true;
+                        if (!app->scene.apache.backward)
+                        {
+                            set_apache_speed(&(app->scene.apache), 3);
+                            set_tilt_speed(&(app->scene.apache), 3);
+                            app->scene.apache.forward = true;
+                        }
                     }
                 }
                 else
@@ -147,11 +150,14 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_S:
                 if (app->camera.locked)
                 {
-                    if (!app->scene.apache.forward)
+                    if (!app->scene.apache.tiltBlock)
                     {
-                        set_apache_speed(&(app->scene.apache), -3);
-                        set_tilt_speed(&(app->scene.apache), -3);
-                        app->scene.apache.backward = true;
+                        if (!app->scene.apache.forward)
+                        {
+                            set_apache_speed(&(app->scene.apache), -3);
+                            set_tilt_speed(&(app->scene.apache), -3);
+                            app->scene.apache.backward = true;
+                        }
                     }
                 }
                 else
@@ -162,7 +168,15 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_A:
                 if (app->camera.locked)
                 {
-                    set_apache_side_speed(&(app->scene.apache), 3);
+                    if (!app->scene.apache.tiltBlock)
+                    {
+                        if (!app->scene.apache.right)
+                        {
+                            set_apache_side_speed(&(app->scene.apache), 3);
+                            set_side_tilt_speed(&(app->scene.apache), 3);
+                            app->scene.apache.left = true;
+                        }
+                    }
                 }
                 else
                 {
@@ -172,7 +186,15 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_D:
                 if (app->camera.locked)
                 {
-                    set_apache_side_speed(&(app->scene.apache), -3);
+                    if (!app->scene.apache.tiltBlock)
+                    {
+                        if (!app->scene.apache.left)
+                        {
+                            set_apache_side_speed(&(app->scene.apache), -3);
+                            set_side_tilt_speed(&(app->scene.apache), -3);
+                            app->scene.apache.right = true;
+                        }
+                    }
                 }
                 else
                 {
@@ -182,9 +204,10 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_SPACE:
                 if (app->camera.locked)
                 {
-                    set_rotorTop_speed(&(app->scene.apache), 5);
-                    set_rotorBack_speed(&(app->scene.apache), 5);
-                    set_apache_vertical_speed(&(app->scene.apache), 3);
+                    if (app->scene.apache.rotor.active)
+                    {
+                        set_apache_vertical_speed(&(app->scene.apache), 3);
+                    }
                 }
                 else
                 {
@@ -194,7 +217,10 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_LSHIFT:
                 if (app->camera.locked)
                 {
-                    set_apache_vertical_speed(&(app->scene.apache), -3);
+                    if (app->scene.apache.rotor.active)
+                    {
+                        set_apache_vertical_speed(&(app->scene.apache), -3);
+                    }
                 }
                 else
                 {
@@ -212,6 +238,30 @@ void handle_app_events(App *app)
                     app->camera.rotation.x = 350.0;
                     app->camera.rotation.y = 0.0;
                     app->camera.rotation.z = 268.0;
+                }
+                break;
+            case SDL_SCANCODE_R:
+                if (app->scene.apache.rotor.active)
+                {
+                    app->scene.apache.rotor.active = false;
+                }
+                else
+                {
+                    app->scene.apache.rotor.active = true;
+                }
+                break;
+            case SDL_SCANCODE_F1:
+                if (app->scene.helpShow)
+                {
+                    app->scene.helpShow = false;
+                    glFrustum(
+                        -.08, .08,
+                        -.06, .06,
+                        .1, 6000);
+                }
+                else
+                {
+                    app->scene.helpShow = true;
                 }
                 break;
             default:
@@ -240,6 +290,9 @@ void handle_app_events(App *app)
                 if (app->camera.locked)
                 {
                     set_apache_side_speed(&(app->scene.apache), 0);
+                    set_side_tilt_speed(&(app->scene.apache), -3);
+                    app->scene.apache.left = false;
+                    app->scene.apache.right = false;
                 }
                 else
                 {
@@ -297,14 +350,15 @@ void update_app(App *app)
     update_camera(&(app->camera), elapsed_time);
     update_scene(&(app->scene));
     move_apache(&(app->scene.apache), elapsed_time);
+
     rotate_rotor(&(app->scene.apache), elapsed_time);
 
     lock_apache_camera(app);
 
     tilt_apache_forward(&(app->scene.apache), elapsed_time, app->scene.apache.forward);
     tilt_apache_backward(&(app->scene.apache), elapsed_time, app->scene.apache.backward);
-
-    printf("%f \n ",app->scene.apache.tilt.x);
+    tilt_apache_left(&(app->scene.apache), elapsed_time, app->scene.apache.left);
+    tilt_apache_right(&(app->scene.apache), elapsed_time, app->scene.apache.right);
 }
 
 void render_app(App *app)

@@ -141,10 +141,10 @@ void handle_app_events(App *app)
                             app->scene.apache.forward = true;
                         }
                     }
-                    else
-                    {
-                        set_camera_speed(&(app->camera), 3);
-                    }
+                }
+                else
+                {
+                    set_camera_speed(&(app->camera), 3);
                 }
                 break;
             case SDL_SCANCODE_S:
@@ -159,10 +159,10 @@ void handle_app_events(App *app)
                             app->scene.apache.backward = true;
                         }
                     }
-                    else
-                    {
-                        set_camera_speed(&(app->camera), -3);
-                    }
+                }
+                else
+                {
+                    set_camera_speed(&(app->camera), -3);
                 }
                 break;
             case SDL_SCANCODE_A:

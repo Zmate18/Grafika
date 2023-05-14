@@ -60,9 +60,6 @@ void init_apache(Apache *apache)
     apache->tiltSpeed.x = 0.0;
     apache->tiltSpeed.y = 0.0;
     apache->tiltSpeed.z = 0.0;
-
-    apache->forward = false;
-    apache->backward = false;
 }
 
 void set_apache_pos(Apache *apache, vec3 newPos)
@@ -115,8 +112,6 @@ void rotate_rotor(Apache *apache, double time)
     {
         apache->rotor.rotation.x -= 360.0;
     }
-    
-    apache->rotor.rotation.x += apache->rotor.rotationSpeed.x * time * 50;
 
     //top rotor speed up/slow donw
     apache->rotor.rotation.y += apache->rotor.rotationSpeed.y;
@@ -130,14 +125,29 @@ void rotate_rotor(Apache *apache, double time)
         apache->rotor.rotationSpeed.y -= time;
     }
 
-    //slow down to 0 the rotor speed
+    //slow down the top rotor speed to 0
     if (apache->rotor.rotationSpeed.y < 0.0)
     {
         apache->rotor.rotationSpeed.y = 0.0;
     }
-    
-    
-    printf("%f \n", apache->rotor.rotationSpeed.y);
+
+    //back rotor speed up/slow donw
+    apache->rotor.rotation.x += apache->rotor.rotationSpeed.x;
+    if (apache->rotor.rotationSpeed.x <= 8 && apache->rotor.active)
+    {
+        apache->rotor.rotationSpeed.x += time;
+    }
+
+    if (!apache->rotor.active && apache->rotor.rotationSpeed.x >= 0.0)
+    {
+        apache->rotor.rotationSpeed.x -= time;
+    }
+
+    //slow down the back rotor speed to 0
+    if (apache->rotor.rotationSpeed.x < 0.0)
+    {
+        apache->rotor.rotationSpeed.x = 0.0;
+    }
     
 }
 

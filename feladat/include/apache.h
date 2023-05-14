@@ -19,6 +19,7 @@ typedef struct Apache
     vec3 pos;
     vec3 speed;
     vec3 tilt;
+    vec3 tiltPos;
     vec3 tiltSpeed;
     bool forward;
     bool backward;
@@ -92,6 +93,8 @@ void set_rotorBack_speed(Apache* apache, double speed);
 */
 void tilt_apache_forward(Apache* apache, double time, bool tilt);
 
+void set_tilt_pos(Apache* apache, vec3 newPos);
+
 /**
  * Tilt backward the helicopter.
 */
@@ -116,12 +119,5 @@ void set_tilt_speed(Apache* apache, double speed);
  * Sets the helicopter side tilting speed.
 */
 void set_side_tilt_speed(Apache* apache, double speed);
-
-void tilt_apache_forward(Apache* apache, double time, bool tilt);
-
-void tilt_apache_backward(Apache* apache, double time, bool tilt);
-
-void set_tilt_speed(Apache* apache, double speed);
-
 
 #endif /*APACHE_H*/

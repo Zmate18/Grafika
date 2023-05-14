@@ -85,7 +85,6 @@ void update_scene(Scene *scene)
     {
         scene->apache.tiltBlock = false;
     }
-    
 }
 
 void help(GLuint texture)
@@ -115,8 +114,8 @@ void help(GLuint texture)
 void render_scene(const Scene *scene)
 {
     set_material(&(scene->material));
-  
-    //ship
+
+    // ship
     glBindTexture(GL_TEXTURE_2D, scene->ship.texture_id);
     glPushMatrix();
     glRotatef(90.0, 1.0, 0.0, 0.0);
@@ -129,77 +128,37 @@ void render_scene(const Scene *scene)
     glTranslatef(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
     glRotatef(90.0, 1.0, 0.0, 0.0);
     glRotatef(scene->apache.tilt.x, 1.0, 0.0, 0.0);
-    glRotatef(scene->apache.tilt.y, 0.0, 1.0, 0.0);
     glRotatef(scene->apache.tilt.z, 0.0, 0.0, 1.0);
     glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
     draw_model(&(scene->apache.model));
     glPopMatrix();
 
-    //rotor top
+    // rotor top
     glPushMatrix();
     glTranslatef(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
     glRotatef(90.0, 1.0, 0.0, 0.0);
     glRotatef(scene->apache.tilt.x, 1.0, 0.0, 0.0);
-    glRotatef(scene->apache.tilt.y, 0.0, 1.0, 0.0);
     glRotatef(scene->apache.tilt.z, 0.0, 0.0, 1.0);
     glRotatef(scene->apache.rotor.rotation.y, 0.0, 1.0, 0.0);
     glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
     draw_model(&(scene->apache.rotor.rotorTop));
     glPopMatrix();
 
-    //rotor back
+    // rotor back
     glPushMatrix();
     glTranslatef(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
-    glRotatef(90.0, 1.0, 0.0, 0.0);
     glRotatef(scene->apache.tilt.x, 1.0, 0.0, 0.0);
-    glRotatef(scene->apache.tilt.y, 0.0, 1.0, 0.0);
-    glRotatef(scene->apache.tilt.z, 0.0, 0.0, 1.0);
+    glRotatef(scene->apache.tilt.z, 0.0, -1.0, 0.0);
+    glTranslatef(0.3, 4.07, 3.125);
+    glRotatef(90.0, 1.0, 0.0, 0.0);
     glRotatef(scene->apache.rotor.rotation.x, 1.0, 0.0, 0.0);
     glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
     draw_model(&(scene->apache.rotor.rotorBack));
     glPopMatrix();
 
+    // F1 help
     if (scene->helpShow)
     {
         help(scene->help_texture);
     }
-    
-    /*
-    // rotor back
-    glRotatef(scene->apache.rotor.rotation.y, 0.0, 1.0, 0.0);
-    glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z);
-    draw_model(&(scene->apache.rotor.rotorTop));
-    glPopMatrix();
-
-    if (scene->apache.tilt.x >= 0.0 && scene->apache.tilt.x <= 0.25)
-    {
-        glPushMatrix();
-        glTranslatef(scene->apache.pos.x + 0.15, scene->apache.pos.y + 4.07, scene->apache.pos.z + 3.125);
-        glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z + 10.0);
-        glRotatef(90.0, 1.0, 0.0, 0.0);
-        glRotatef(scene->apache.rotor.rotation.x, 1.0, 0.0, 0.0);
-        draw_model(&(scene->apache.rotor.rotorBack));
-        glPopMatrix();
-    }
-    else if (scene->apache.tilt.x > 0.0)
-    {
-        glPushMatrix();
-        glTranslatef(scene->apache.pos.x + 0.15, scene->apache.pos.y + 1.95, scene->apache.pos.z + 4.75);
-        glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z + 10.0);
-        glRotatef(90.0, 1.0, 0.0, 0.0);
-        glRotatef(scene->apache.rotor.rotation.x, 1.0, 0.0, 0.0);
-        draw_model(&(scene->apache.rotor.rotorBack));
-        glPopMatrix();
-    }
-    else
-    {
-        glPushMatrix();
-        glTranslatef(scene->apache.pos.x + 0.15, scene->apache.pos.y + 5.1, scene->apache.pos.z + 0.7);
-        glVertex3f(scene->apache.pos.x, scene->apache.pos.y, scene->apache.pos.z + 10.0);
-        glRotatef(90.0, 1.0, 0.0, 0.0);
-        glRotatef(scene->apache.rotor.rotation.x, 1.0, 0.0, 0.0);
-        draw_model(&(scene->apache.rotor.rotorBack));
-        glPopMatrix();
-    }
-    */
 }

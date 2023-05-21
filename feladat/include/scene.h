@@ -60,10 +60,10 @@ void help(GLuint texture);
 
 void render_water_side(const Scene* scene);
 
-void render_water_(const Scene* scene);
+void render_waterTop(const Scene* scene);
 
 bool check_apache_boundaries(Scene* scene);
 
-int showEndGameDialog();
+int waterDialog();
 
 #endif /* SCENE_H */

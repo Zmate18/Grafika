@@ -10,8 +10,8 @@ void init_scene(Scene *scene)
     scene->water_pos.y = 0.0;
     scene->water_pos.z = 0.0;
 
-    scene->water_speed.x = 0.6;
-    scene->water_speed.y = 0.6;
+    scene->water_speed.x = 0.1;
+    scene->water_speed.y = 0.1;
     scene->water_speed.z = 0.0;
 
     init_ship(&(scene->ship));
@@ -109,7 +109,7 @@ void update_scene(Scene *scene)
     if (scene->apache.pos.z <= -2.5 && !check_apache_boundaries(scene))
     {
         int button_id;
-        button_id = showEndGameDialog();
+        button_id = waterDialog();
         if (button_id == 0)
         {
             scene->exit = true;
@@ -161,13 +161,13 @@ void help(GLuint texture)
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
-    glVertex3f(-1, 1, -3);
+    glVertex3f(-1.5, 1.5, -3);
     glTexCoord2f(1, 0);
-    glVertex3f(1, 1, -3);
+    glVertex3f(1.5, 1.5, -3);
     glTexCoord2f(1, 1);
-    glVertex3f(1, -1, -3);
+    glVertex3f(1.5, -1.5, -3);
     glTexCoord2f(0, 1);
-    glVertex3f(-1, -1, -3);
+    glVertex3f(-1.5, -1.5, -3);
     glEnd();
 
     glDisable(GL_COLOR_MATERIAL);
@@ -179,7 +179,7 @@ void render_scene(const Scene *scene)
 {
     set_material(&(scene->material));
 
-    // water side
+    // water bottom
     glDisable(GL_LIGHTING);
     glPushMatrix();
     glTranslatef(scene->water_pos.x, 0.0, 0.0);
@@ -187,11 +187,15 @@ void render_scene(const Scene *scene)
     glPopMatrix();
     glEnable(GL_LIGHTING);
 
-    // water
+    // water top
     glDisable(GL_LIGHTING);
     glPushMatrix();
-    glTranslatef(0.0, scene->water_pos.y, 0.0);
-    render_water_(scene);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(1.0, 1.0, 1.0, 0.5f);
+    glTranslatef(0.0, scene->water_pos.y, 0.01);
+    render_waterTop(scene);
+    glDisable(GL_BLEND);
     glPopMatrix();
     glEnable(GL_LIGHTING);
 
@@ -269,7 +273,7 @@ void render_water_side(const Scene *scene)
     glEnd();
 }
 
-void render_water_(const Scene *scene)
+void render_waterTop(const Scene *scene)
 {
     glBindTexture(GL_TEXTURE_2D, scene->water_texture);
     glBegin(GL_QUADS);
@@ -295,7 +299,7 @@ void render_water_(const Scene *scene)
     glEnd();
 }
 
-int showEndGameDialog()
+int waterDialog()
 {
     const SDL_MessageBoxButtonData buttons[] = {
         {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit"},

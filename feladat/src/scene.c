@@ -1,10 +1,18 @@
 #include "scene.h"
-
+#include <GL/gl.h>
 #include <obj/load.h>
 #include <obj/draw.h>
 
 void init_scene(Scene *scene)
 {
+    scene->water_texture = load_texture("assets/textures/water.png");
+    scene->water_pos.x = 0.0;
+    scene->water_pos.y = 0.0;
+    scene->water_pos.z = 0.0;
+
+    scene->water_speed.x = 0.6;
+    scene->water_speed.y = 0.6;
+    scene->water_speed.z = 0.0;
 
     init_ship(&(scene->ship));
 
@@ -27,10 +35,22 @@ void init_scene(Scene *scene)
     scene->lightingLevel = 1.8f;
     set_lighting(scene->lightingLevel);
 
-    glFogf(GL_FOG_DENSITY, 0.25f);
+    // fog settings
+    scene->fogColor[0] = 0.5f;
+    scene->fogColor[1] = 0.5f;
+    scene->fogColor[2] = 0.5f;
+    scene->fogColor[3] = 1.0f;
+    glEnable(GL_FOG);
+    glFogf(GL_FOG_DENSITY, 0.0f);
+    glFogfv(GL_FOG_COLOR, scene->fogColor);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
     scene->helpShow = false;
     scene->help_texture = load_texture("assets/textures/help.jpg");
+
+    scene->exit = false;
+    scene->restart = false;
 }
 
 void set_lighting(float lightingLevel)
@@ -72,12 +92,12 @@ void set_material(const Material *material)
 
 void update_scene(Scene *scene)
 {
-    if (scene->apache.pos.z < 0)
+    if (scene->apache.pos.z < 0 && check_apache_boundaries(scene))
     {
         scene->apache.pos.z += 0.09;
     }
 
-    if (scene->apache.pos.z >= 0.0 && scene->apache.pos.z <= 2.0)
+    if (scene->apache.pos.z >= 0.0 && scene->apache.pos.z <= 1.0 && check_apache_boundaries(scene))
     {
         scene->apache.tiltBlock = true;
     }
@@ -85,35 +105,95 @@ void update_scene(Scene *scene)
     {
         scene->apache.tiltBlock = false;
     }
+
+    if (scene->apache.pos.z <= -2.5 && !check_apache_boundaries(scene))
+    {
+        int button_id;
+        button_id = showEndGameDialog();
+        if (button_id == 0)
+        {
+            scene->exit = true;
+        }
+        else
+        {
+            scene->restart = true;
+        }
+        
+    }
+    
+}
+
+bool check_apache_boundaries(Scene *scene)
+{
+    if (scene->apache.pos.x >= 5.47)
+    {
+        return false;
+    }
+
+    if (scene->apache.pos.x <= -5.83)
+    {
+        return false;
+    }
+
+    if (scene->apache.pos.y <= -27.68)
+    {
+        return false;
+    }
+
+    if (scene->apache.pos.y >= 25)
+    {
+        return false;
+    }
+    return true;
 }
 
 void help(GLuint texture)
 {
+    glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glColor3f(1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, texture);
+    glColor3f(1, 1, 1);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
-    glVertex3d(-2, 1.5, -3);
+    glVertex3f(-1, 1, -3);
     glTexCoord2f(1, 0);
-    glVertex3d(2, 1.5, -3);
+    glVertex3f(1, 1, -3);
     glTexCoord2f(1, 1);
-    glVertex3d(2, -1.5, -3);
+    glVertex3f(1, -1, -3);
     glTexCoord2f(0, 1);
-    glVertex3d(-2, -1.5, -3);
+    glVertex3f(-1, -1, -3);
     glEnd();
 
+    glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
 
 void render_scene(const Scene *scene)
 {
     set_material(&(scene->material));
+
+    // water side
+    glDisable(GL_LIGHTING);
+    glPushMatrix();
+    glTranslatef(scene->water_pos.x, 0.0, 0.0);
+    render_water_side(scene);
+    glPopMatrix();
+    glEnable(GL_LIGHTING);
+
+    // water
+    glDisable(GL_LIGHTING);
+    glPushMatrix();
+    glTranslatef(0.0, scene->water_pos.y, 0.0);
+    render_water_(scene);
+    glPopMatrix();
+    glEnable(GL_LIGHTING);
 
     // ship
     glBindTexture(GL_TEXTURE_2D, scene->ship.texture_id);
@@ -161,4 +241,84 @@ void render_scene(const Scene *scene)
     {
         help(scene->help_texture);
     }
+}
+
+void render_water_side(const Scene *scene)
+{
+    glBindTexture(GL_TEXTURE_2D, scene->water_texture);
+    glBegin(GL_QUADS);
+    glPushMatrix();
+    for (int i = -50; i < 50; i++)
+    {
+        for (int j = -30; j <= 30; j++)
+        {
+            glTexCoord2f(0, 1);
+            glVertex3f(j, i, 0);
+
+            glTexCoord2f(1, 1);
+            glVertex3f(j + 1, i, 0);
+
+            glTexCoord2f(1, 0);
+            glVertex3f(j + 1, i + 1, 0);
+
+            glTexCoord2f(0, 0);
+            glVertex3f(j, i + 1, 0);
+        }
+    }
+    glPopMatrix();
+    glEnd();
+}
+
+void render_water_(const Scene *scene)
+{
+    glBindTexture(GL_TEXTURE_2D, scene->water_texture);
+    glBegin(GL_QUADS);
+    glPushMatrix();
+    for (int i = -50; i < 50; i++)
+    {
+        for (int j = -30; j <= 30; j++)
+        {
+            glTexCoord2f(0, 1);
+            glVertex3f(j, i, 0);
+
+            glTexCoord2f(1, 1);
+            glVertex3f(j + 1, i, 0);
+
+            glTexCoord2f(1, 0);
+            glVertex3f(j + 1, i + 1, 0);
+
+            glTexCoord2f(0, 0);
+            glVertex3f(j, i + 1, 0);
+        }
+    }
+    glPopMatrix();
+    glEnd();
+}
+
+int showEndGameDialog()
+{
+    const SDL_MessageBoxButtonData buttons[] = {
+        {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit"},
+        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Restart"},
+    };
+    const SDL_MessageBoxColorScheme colorScheme = {
+        {{255, 0, 0},
+         {0, 255, 0},
+         {255, 255, 0},
+         {0, 0, 255},
+         {255, 0, 255}}};
+
+    const SDL_MessageBoxData messageBoxData = {
+        SDL_MESSAGEBOX_INFORMATION,
+        NULL,
+        "Drowned",
+        "You flew the helicopter into the ocean!",
+        SDL_arraysize(buttons),
+        buttons,
+        &colorScheme};
+
+    int buttonid;
+    SDL_ShowMessageBox(&messageBoxData, &buttonid);
+
+    return buttonid;
 }

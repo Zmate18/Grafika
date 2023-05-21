@@ -1,6 +1,7 @@
 #include "app.h"
 
 #include <SDL2/SDL_image.h>
+#include <math.h>
 
 void init_app(App *app, int width, int height)
 {
@@ -204,7 +205,7 @@ void handle_app_events(App *app)
             case SDL_SCANCODE_SPACE:
                 if (app->camera.locked)
                 {
-                    if (app->scene.apache.rotor.active)
+                    if (app->scene.apache.rotor.active && app->scene.apache.rotor.rotationSpeed.y >= 6)
                     {
                         set_apache_vertical_speed(&(app->scene.apache), 3);
                     }
@@ -241,14 +242,18 @@ void handle_app_events(App *app)
                 }
                 break;
             case SDL_SCANCODE_R:
-                if (app->scene.apache.rotor.active)
+                if (app->scene.apache.tiltBlock)
                 {
-                    app->scene.apache.rotor.active = false;
+                    if (app->scene.apache.rotor.active)
+                    {
+                        app->scene.apache.rotor.active = false;
+                    }
+                    else
+                    {
+                        app->scene.apache.rotor.active = true;
+                    }
                 }
-                else
-                {
-                    app->scene.apache.rotor.active = true;
-                }
+
                 break;
             case SDL_SCANCODE_F1:
                 if (app->scene.helpShow)
@@ -263,6 +268,9 @@ void handle_app_events(App *app)
                 {
                     app->scene.helpShow = true;
                 }
+                break;
+            case SDL_SCANCODE_K:
+                printf("%f, %f, %f \n", app->camera.position.x, app->camera.position.y, app->camera.position.z);
                 break;
                 break;
             default:
@@ -359,6 +367,32 @@ void update_app(App *app)
     tilt_apache_backward(&(app->scene.apache), elapsed_time, app->scene.apache.backward);
     tilt_apache_left(&(app->scene.apache), elapsed_time, app->scene.apache.left);
     tilt_apache_right(&(app->scene.apache), elapsed_time, app->scene.apache.right);
+
+    if (app->scene.water_pos.x >= 10.0)
+    {
+        app->scene.water_pos.x = 0.0;
+    }
+    app->scene.water_pos.x += app->scene.water_speed.x * elapsed_time;
+
+    if (app->scene.water_pos.y >= 10.0)
+    {
+        app->scene.water_pos.y = 0.0;
+    }
+    app->scene.water_pos.y += app->scene.water_speed.y * elapsed_time;
+
+    // exit & restart
+    if (app->scene.restart)
+    {
+        app->scene.restart = false;
+        init_scene(&(app->scene));
+        init_camera(&(app->camera));
+    }
+    if (app->scene.exit)
+    {
+        app->is_running = false;
+    }
+    
+    
 }
 
 void render_app(App *app)
@@ -370,11 +404,6 @@ void render_app(App *app)
     set_view(&(app->camera));
     render_scene(&(app->scene));
     glPopMatrix();
-
-    if (app->camera.is_preview_visible)
-    {
-        show_texture_preview();
-    }
 
     SDL_GL_SwapWindow(app->window);
 }

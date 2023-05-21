@@ -148,7 +148,6 @@ void rotate_rotor(Apache *apache, double time)
     {
         apache->rotor.rotationSpeed.x = 0.0;
     }
-    
 }
 
 void set_rotorTop_speed(Apache *apache, double speed)

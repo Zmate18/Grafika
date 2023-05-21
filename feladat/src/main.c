@@ -17,5 +17,11 @@ int main(int argc, char* argv[])
     }
     destroy_app(&app);
 
+    if (argv[argc])
+    {
+        printf(" ");
+    }
+    
+
     return 0;
 }

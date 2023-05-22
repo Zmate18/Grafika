@@ -25,3 +25,6 @@ A beadandóm egy 3D-s világban szereplő repülőgép-anyahajót tartalmaz, ami
 <kbd>+</kbd> - Fények növelése <br />
 <kbd>-</kbd> - Fények csökkentése <br />
 <kbd>L</kbd> - Kamera rögzítése a helikopterre, vagy szabad kamerára váltás <br />
+
+### Assets
+https://drive.google.com/drive/folders/1tF-kwnfgNz3ExPp6IbkZhzG-XJ4GI7mv

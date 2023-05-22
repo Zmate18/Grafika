@@ -14,6 +14,8 @@ void init_scene(Scene *scene)
     scene->water_speed.y = 0.1;
     scene->water_speed.z = 0.0;
 
+    init_mapbox(&(scene->mapbox));
+
     init_ship(&(scene->ship));
 
     init_apache(&(scene->apache));
@@ -41,7 +43,7 @@ void init_scene(Scene *scene)
     scene->fogColor[2] = 0.5f;
     scene->fogColor[3] = 1.0f;
     glEnable(GL_FOG);
-    glFogf(GL_FOG_DENSITY, 0.0f);
+    glFogf(GL_FOG_DENSITY, 0.05f);
     glFogfv(GL_FOG_COLOR, scene->fogColor);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -179,6 +181,11 @@ void render_scene(const Scene *scene)
 {
     set_material(&(scene->material));
 
+    // box of the map
+    glDisable(GL_LIGHTING);
+    render_mapbox(&(scene->mapbox));
+    glEnable(GL_LIGHTING);
+
     // water bottom
     glDisable(GL_LIGHTING);
     glPushMatrix();
@@ -252,9 +259,9 @@ void render_water_side(const Scene *scene)
     glBindTexture(GL_TEXTURE_2D, scene->water_texture);
     glBegin(GL_QUADS);
     glPushMatrix();
-    for (int i = -50; i < 50; i++)
+    for (int i = -60; i < 60; i++)
     {
-        for (int j = -30; j <= 30; j++)
+        for (int j = -60; j <= 60; j++)
         {
             glTexCoord2f(0, 1);
             glVertex3f(j, i, 0);
@@ -278,9 +285,9 @@ void render_waterTop(const Scene *scene)
     glBindTexture(GL_TEXTURE_2D, scene->water_texture);
     glBegin(GL_QUADS);
     glPushMatrix();
-    for (int i = -50; i < 50; i++)
+    for (int i = -60; i < 60; i++)
     {
-        for (int j = -30; j <= 30; j++)
+        for (int j = -60; j <= 60; j++)
         {
             glTexCoord2f(0, 1);
             glVertex3f(j, i, 0);

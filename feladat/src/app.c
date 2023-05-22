@@ -100,7 +100,7 @@ void reshape(GLsizei width, GLsizei height)
     glFrustum(
         -.08, .08,
         -.06, .06,
-        .1, 70);
+        .1, 300);
 }
 
 void handle_app_events(App *app)
@@ -391,8 +391,6 @@ void update_app(App *app)
     {
         app->is_running = false;
     }
-    
-    
 }
 
 void render_app(App *app)

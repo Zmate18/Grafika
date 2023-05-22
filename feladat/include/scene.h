@@ -5,6 +5,7 @@
 #include "texture.h"
 #include "ship.h"
 #include "apache.h"
+#include "mapbox.h"
 #include <obj/model.h>
 #include "utils.h"
 #include <obj/load.h>
@@ -26,6 +27,7 @@ typedef struct Scene
     vec3 water_speed;
     bool exit;
     bool restart;
+    Mapbox mapbox;
 } Scene;
 
 /**
